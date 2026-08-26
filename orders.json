@@ -1,0 +1,57 @@
+[
+  {
+    "order_id": "A001",
+    "customer": {
+      "name": "Ali",
+      "city": "Tehran"
+    },
+    "items": [
+      {
+        "product": "Laptop",
+        "qty": 1,
+        "price": 5000
+      },
+      {
+        "product": "Mouse",
+        "qty": 2,
+        "price": 200
+      }
+    ],
+    "status": "delivered"
+  },
+  {
+    "order_id": "A002",
+    "customer": {
+      "name": "Sara",
+      "city": "Mashhad"
+    },
+    "items": [
+      {
+        "product": "Keyboard",
+        "qty": 1,
+        "price": 500
+      }
+    ],
+    "status": "pending"
+  },
+  {
+    "order_id": "A003",
+    "customer": {
+      "name": "Reza",
+      "city": "Tehran"
+    },
+    "items": [
+      {
+        "product": "Monitor",
+        "qty": 2,
+        "price": 3000
+      },
+      {
+        "product": "Mouse",
+        "qty": 1,
+        "price": 200
+      }
+    ],
+    "status": "delivered"
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "order_count": 3,
+  "delivered_count": 2,
+  "best_product": "Mouse",
+  "orders": {
+    "A001": 5400,
+    "A002": 500,
+    "A003": 6200
+  }
+}

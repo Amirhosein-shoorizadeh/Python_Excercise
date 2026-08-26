@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "Ali Ahmadi",
+    "age": 28,
+    "email": "ali@test.com",
+    "active": true,
+    "score": 85
+  },
+  {
+    "id": 2,
+    "name": "Sara Hoseini",
+    "age": 17,
+    "email": "sara@test.com",
+    "active": true,
+    "score": 92
+  },
+  {
+    "id": 3,
+    "name": "Reza Karimi",
+    "age": 35,
+    "email": "bad-email",
+    "active": false,
+    "score": 70
+  },
+  {
+    "id": 4,
+    "name": "Mina Tehrani",
+    "age": 29,
+    "email": "mina@test.com",
+    "active": true,
+    "score": null
+  },
+  {
+    "id": 5,
+    "name": "Kamran Jalili",
+    "age": 22,
+    "email": "kam@test.com",
+    "active": true,
+    "score": 88
+  }
+]

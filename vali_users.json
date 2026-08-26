@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Ali Ahmadi",
+    "age": 28,
+    "email": "ali@test.com",
+    "active": true,
+    "score": 85
+  },
+  {
+    "id": 5,
+    "name": "Kamran Jalili",
+    "age": 22,
+    "email": "kam@test.com",
+    "active": true,
+    "score": 88
+  }
+]

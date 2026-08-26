@@ -1,0 +1,44 @@
+[
+  {
+    "Ali": 84.33333333333333,
+    "Sara": 91.66666666666667,
+    "Reza": 71.66666666666667,
+    "Mina": 97.66666666666667,
+    "Kamran": 61.666666666666664
+  },
+  {
+    "Tehran": [
+      {
+        "Name": "Ali",
+        "Age": 17,
+        "Math": 85,
+        "Science": 90,
+        "English": 78,
+        "City": "Tehran"
+      },
+      84.33333333333333
+    ],
+    "Isfahan": [
+      {
+        "Name": "Sara",
+        "Age": 18,
+        "Math": 92,
+        "Science": 88,
+        "English": 95,
+        "City": "Isfahan"
+      },
+      91.66666666666667
+    ],
+    "Mashhad": [
+      {
+        "Name": "Mina",
+        "Age": 19,
+        "Math": 95,
+        "Science": 98,
+        "English": 100,
+        "City": "Mashhad"
+      },
+      97.66666666666667
+    ]
+  }
+]
