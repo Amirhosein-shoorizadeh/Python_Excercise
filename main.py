@@ -5,7 +5,8 @@ from collections import defaultdict
 import openpyxl
 import json
 import csv
-
+import datetime
+import time
 
 
 # 1. Calculate the area of a circle with radius 7
@@ -595,7 +596,7 @@ def func_12():
         reverse=True
     )
     print(f"5. {students_sorted}")
-
+# ///////////////////////////////////////////////////////////////////////////////////////////////////
 def load_json(filepath):
     try:
         with open(filepath, "r", encoding="utf-8") as f:
@@ -707,7 +708,6 @@ def summarize(records, numeric_field):
 # # Predict the output, then run it. Were you right?
 
 def generate_report(*records, **options):
-
     title = options.get("title", "Report")
     fields = options.get("fields")
     sort_by = options.get("sort_by")
@@ -747,8 +747,225 @@ def get_grade(score):
         return "D"
     else:
         return "F"
+#//////////////////////////////////////////////////////////////////////////////////////////////////////
+def get_difficulty():
+    while True:
+        difficulty = input("Enter difficulty:(1/2/3) ")
+        if difficulty == "1":
+            return 10
+        elif difficulty == "2":
+            return 7
+        elif difficulty == "3":
+            return 5
+        else :
+            print("Invalid difficulty please enter 1 or of 2 or 3")
+def get_guess(low , high):
+    while True:
+        guess = input("Enter guess:")
+        try:
+            guess=int(guess)
+            if guess < low or guess > high:
+              print("Invalid guess please enter lower or higher")
+            else :
+                return guess
+        except ValueError:
+            print("Invalid guess please enter numeric guess")
+def check_guess(guess, secret):
+    if guess == secret:
+        print("Correct!")
+        return True
+    elif guess < secret:
+        print("too_low")
+        return False
+    else :
+        print("too_high")
+        return False
+def calculate_score(guesses_used, max_guesses):
+    return (max_guesses -  guesses_used) * (1000 / max_guesses)
+def load_highscores(filepath="highscores.json"):
+    return load_json(filepath)
+def save_highscore(name, score, difficulty, filepath="highscores.json"):
+    new_highscore = {}
+    new_highscore["name"] = name
+    new_highscore["score"] = score
+    new_highscore["difficulty"] = difficulty
+    formatted_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    new_highscore["Time"] = formatted_time
+    high_score=(load_highscores(filepath))
+    if high_score is not None:
+        high_score.append(new_highscore)
+        sorted_high_scores=sorted(high_score, key=lambda h: h["score"], reverse=True)
+        top_5 = sorted_high_scores[:5]
+        save_json(top_5, filepath)
+    else :
+        save_json([new_highscore], filepath)
+
+def show_highscores(filepath="highscores.json"):
+     top_5=load_json(filepath)
+     i =1
+     for h in top_5:
+         print(f"{i}. is {h['name']} by {h['score']} in {h['difficulty']} in {h['Time']}")
+         i += 1
+
+def play_game():
+
+    while True:
+        hoom=input("Would you like to do ? (play/show high scores( by show )/ exit)")
+        if hoom == "play":
+            name = input("ur name: ")
+            con = True
+            while con:
+                difficulty = get_difficulty()
+                secret = random.randint(1, 100)
+                print(secret)
+                high = 100
+                low = 0
+                i = 0
+                while difficulty > i:
+                    guess = get_guess(low, high)
+                    if check_guess(guess, secret):
+                        break
+                    else:
+                        i+=1
+                score = calculate_score(i,difficulty)
+                print(f"hey {name} ur score is:", score)
+                if difficulty == 10 :
+                    dif_massage= "easy"
+                elif difficulty == 7 :
+                    dif_massage= "hard"
+                elif difficulty == 5 :
+                    dif_massage= "too_hard"
+                save_highscore(name, score,dif_massage)
+                show_highscores()
+                while True:
+                    a=input("Would you like to play again? (y/n)")
+                    if a == "n":
+                        con = False
+                        break
+                    elif a == "y":
+                        pass
+                    else :
+                        print("invalid input")
+        elif hoom == "show":
+            show_highscores()
+        elif hoom == "exit" :
+            break
+        else :
+            print("Invalid input")
+
+class DataFile:
+
+    def __init__(self, filepath):
+        self.filepath = filepath
+        self.data = []
+
+    def load(self):
+        """Must be implemented by subclasses."""
+        raise NotImplementedError("Subclass must implement load()")
+
+    def save(self, output_path, data=None):
+        """Must be implemented by subclasses."""
+
+    def filter(self, field, value):
+        return [r for r in self.data if r.get(field) == value]
+
+    def get_values(self, field):
+        return [r[field] for r in self.data if r.get(field) is not None]
+
+    def summary(self):
+        if not self.data:
+            print("No data loaded.")
+            return
+        print(f"File: {self.filepath}")
+        print(f"Records: {len(self.data)}")
+        print(f"Fields : {list(self.data[0].keys())}")
+    def __len__(self):
+        return len(self.data)
+    def __repr__(self):
+        return f"{self.__class__.__name__}('{self.filepath}', {len(self.data)} records)"
 
 
+class JSONFile(DataFile):
+    def load(self):
+        with open(self.filepath, "r", encoding="utf-8") as f:
+            self.data = json.load(f)
+        print(f"Loaded {len(self.data)} records from {self.filepath}")
+    def save(self, output_path, data=None):
+        to_save = data if data is not None else self.data
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(to_save, f, indent=2, ensure_ascii=False)
+        print(f"Saved {len(to_save)} records to {output_path}")
+
+
+class CSVFile(DataFile):
+    def load(self):
+        with open(self.filepath, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            self.data = [dict(row) for row in reader]
+        print(f"Loaded {len(self.data)} records from {self.filepath}")
+    def save(self, output_path, data=None):
+        to_save = data if data is not None else self.data
+        if not to_save:
+            return
+        with open(output_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=to_save[0].keys()
+            )
+            writer.writeheader()
+            writer.writerows(to_save)
+        print(f"Saved {len(to_save)} records to {output_path}")
+
+
+class ExcelFile(DataFile):
+    def load(self):
+        import openpyxl
+        wb = openpyxl.load_workbook(self.filepath)
+        ws = wb.active
+        headers = [cell.value for cell in ws[1]]
+        self.data = []
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            self.data.append(dict(zip(headers, row)))
+        print(f"Loaded {len(self.data)} records from {self.filepath}")
+    def save(self, output_path, data=None):
+        import openpyxl
+        to_save = data if data is not None else self.data
+        if not to_save:
+            return
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        headers = list(to_save[0].keys())
+        ws.append(headers)
+        for record in to_save:
+            ws.append([record.get(header) for header in headers])
+        wb.save(output_path)
+        print(f"Saved {len(to_save)} records to {output_path}")
+
+
+jf = JSONFile("data.json")
+jf.load()
+print(jf)
+print(len(jf))
+jf.summary()
+print(jf.filter("name", "Ali"))
+print(jf.get_values("name"))
+jf.save("output.json")
+cf = CSVFile("data.csv")
+cf.load()
+print(cf)
+print(len(cf))
+cf.summary()
+print(cf.filter("name", "Ali"))
+print(cf.get_values("name"))
+cf.save("output.csv")
+ef = ExcelFile("data.xlsx")
+ef.load()
+print(ef)
+print(len(ef))
+ef.summary()
+print(ef.filter("name", "Ali"))
+print(ef.get_values("name"))
+ef.save("output.xlsx")
 
 if __name__ == "__main__":
     # func_1()
@@ -762,4 +979,4 @@ if __name__ == "__main__":
     # func_9()
     # func_10()
     # func_11()
-     func_12()
+    play_game()
